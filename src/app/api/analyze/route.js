@@ -1,4 +1,5 @@
 export const runtime = 'nodejs'
+
 export async function POST(request) {
   try {
     const { prompt } = await request.json()
@@ -17,9 +18,14 @@ export async function POST(request) {
       })
     })
 
-    const data = await res.json()
+    const rawText = await res.text()
+    console.log('Anthropic status:', res.status)
+    console.log('Anthropic response:', rawText)
+
+    const data = JSON.parse(rawText)
     return Response.json(data)
   } catch (e) {
+    console.log('Catch error:', e.message)
     return Response.json({ error: e.message }, { status: 500 })
   }
 }
