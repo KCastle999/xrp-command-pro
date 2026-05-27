@@ -4,7 +4,7 @@ export async function POST(request) {
   try {
     const { prompt } = await request.json()
     
-    const key = process.env.API_Key_Anthropic
+    const key = process.env.API_KEY_ANTHROPIC
     console.log('Key exists:', !!key)
     console.log('Key length:', key?.length)
     console.log('Key prefix:', key?.substring(0, 15))
