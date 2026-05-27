@@ -1,3 +1,4 @@
+export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 const fmt = (n, d = 4) => n == null ? 'N/A' : Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d })
