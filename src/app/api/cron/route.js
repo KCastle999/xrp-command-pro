@@ -148,7 +148,7 @@ export async function GET(request) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': process.env.API_Key_Anthropic,
+        'x-api-key': process.env.API_KEY_ANTHROPIC,
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
