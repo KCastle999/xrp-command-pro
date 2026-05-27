@@ -148,18 +148,14 @@ export default function Dashboard() {
   }, [fetchData])
 
   const getAI = async () => {
-    if (!data) return
-    setAiLoading(true); setAiText('')
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1200,
-          messages: [{
-            role: 'user',
-            content: `You are a professional XRP analyst. Provide a structured institutional-grade trading analysis using this live data:
+  if (!data) return
+  setAiLoading(true); setAiText('')
+  try {
+    const res = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: `You are a professional XRP analyst. Provide a structured institutional-grade trading analysis using this live data:
 
 Price: $${fmt(data.price, 4)} | 24h: ${fmtPct(data.change24h)} | 7d: ${fmtPct(data.change7d)} | 30d: ${fmtPct(data.change30d)}
 Volume: ${fmtBig(data.volume24h)} | MCap: ${fmtBig(data.marketCap)} | Vol/MCap: ${data.volMcapRatio?.toFixed(2)}%
@@ -178,14 +174,13 @@ Respond with these bold headers:
 **6. RECOMMENDATION**
 
 Be direct, specific, cite actual prices. Professional tone.`
-          }]
-        })
       })
-      const j = await res.json()
-      setAiText(j.content?.find(b => b.type === 'text')?.text || 'Unavailable.')
-    } catch { setAiText('⚠️ Failed. Check API key in environment variables.') }
-    finally { setAiLoading(false) }
-  }
+    })
+    const j = await res.json()
+    setAiText(j.content?.find(b => b.type === 'text')?.text || 'Unavailable.')
+  } catch { setAiText('⚠️ Failed. Check Vercel function logs.') }
+  finally { setAiLoading(false) }
+}
 
   const posResult = (() => {
     const c = parseFloat(pos.capital), r = parseFloat(pos.risk), e = parseFloat(pos.entry), s = parseFloat(pos.stop)
